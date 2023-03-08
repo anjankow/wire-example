@@ -1,6 +1,6 @@
 package azure
 
-import "wire-example/config"
+import "wire-example/internal/config"
 
 type AzureClientIfc interface {
 	GetName() string

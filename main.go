@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"wire-example/config"
-	"wire-example/mywire"
+	"wire-example/internal/server"
 )
 
 func main() {
-	cfg := config.Config{UseAzureMock: true}
+	// cfg := config.Config{UseAzureMock: true}
 
-	server := mywire.ProvideServer(cfg)
+	server := server.Server{}
 	fmt.Print(server.Azure.GetClientName())
 	if err := server.Azure.CheckDBConnection(); err != nil {
 		panic(err)
