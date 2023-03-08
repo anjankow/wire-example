@@ -1,16 +1,18 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 	"wire-example/config"
+	"wire-example/mywire"
 )
 
 func main() {
-	cfg := config.Config{UserAzureMock: true}
+	cfg := config.Config{UseAzureMock: true}
 
-	server := server.Wire(cfg)
+	server := mywire.ProvideServer(cfg)
+	fmt.Print(server.Azure.GetClientName())
+	if err := server.Azure.CheckDBConnection(); err != nil {
+		panic(err)
+	}
 
-	userHandler := user.Wire(db)
-	http.Handle("/user", userHandler.FetchByUsername())
-	http.ListenAndServe(":8000", nil)
 }

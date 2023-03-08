@@ -7,10 +7,10 @@ type AzureService struct {
 	db     *sql.DB
 }
 
-func (a Azure) GetClientName() string {
+func (a AzureService) GetClientName() string {
 	return a.client.GetName()
 }
 
-func (a Azure) CheckDBConnection() error {
+func (a AzureService) CheckDBConnection() error {
 	return a.db.Ping()
 }

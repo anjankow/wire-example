@@ -18,22 +18,35 @@ func ProvideDB(cfg config.Config) *sql.DB {
 	return db
 }
 
-var azureClientProviderSet wire.ProviderSet = wire.NewSet(
+var azureSet wire.ProviderSet = wire.NewSet(
 	azure.NewAzureClient,
-	azure.NewAzureClientMock,
-
 	wire.Bind(new(azure.AzureClientIfc), new(azure.AzureClient)),
+)
+var azureMockSet wire.ProviderSet = wire.NewSet(
+	azure.NewAzureClientMock,
 	wire.Bind(new(azure.AzureClientIfc), new(azure.AzureClientMock)),
 )
 
-func ProvideAzure(cfg config.Config) azure.AzureService {
-	panic(wire.Build(azureClientProviderSet, cfg))
+func ProvideAzure() azure.AzureService {
+	panic(wire.Build(azureSet))
+}
+
+func ProvideAzureMock() azure.AzureService {
+	panic(wire.Build(azureMockSet))
 }
 
 func ProvideServer(cfg config.Config) *server.Server {
-	panic(wire.Build(ProvideAzure, ProvideDB))
+	if cfg.UseAzureMock {
+		panic(wire.Build(ProvideAzureMock, ProvideDB))
+	} else {
+		panic(wire.Build(ProvideAzureMock, ProvideDB))
+	}
 }
 
 func ProvideCronJob(cfg config.Config) *server.Server {
-	panic(wire.Build(ProvideAzure, ProvideDB))
+	if cfg.UseAzureMock {
+		panic(wire.Build(ProvideAzureMock, ProvideDB))
+	} else {
+		panic(wire.Build(ProvideAzureMock, ProvideDB))
+	}
 }

@@ -6,13 +6,13 @@ import (
 )
 
 type Server struct {
-	azure       azure.Azure
+	Azure       azure.AzureService
 	azureClient azure.AzureClient
 	db          *sql.DB
 }
 
 type CronJob struct {
-	azure       azure.Azure
+	Azure       azure.AzureService
 	azureClient azure.AzureClient
 	db          *sql.DB
 }
