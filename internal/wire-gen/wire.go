@@ -1,4 +1,5 @@
-//+build wireinject
+//go:build wireinject
+// +build wireinject
 
 package wiregen
 
@@ -10,41 +11,31 @@ import (
 	"github.com/google/wire"
 )
 
-var azureSet wire.ProviderSet = wire.NewSet(
+var azureClientSet wire.ProviderSet = wire.NewSet(
 	azure.NewAzureClient,
 	wire.Bind(new(azure.AzureClientIfc), new(azure.AzureClient)),
 )
-var azureMockSet wire.ProviderSet = wire.NewSet(
+var azureClientMockSet wire.ProviderSet = wire.NewSet(
 	azure.NewAzureClientMock,
 	wire.Bind(new(azure.AzureClientIfc), new(azure.AzureClientMock)),
 )
 
-func ProvideAzure() (*azure.AzureService, error) {
-	wire.Build(azureSet)
-	return new(azure.AzureService), nil
+func ProvideAzureClient(cfg config.Config) azure.AzureClientIfc {
+	panic(wire.Build(azureClientSet))
+	// return new(azure.AzureClient), nil
 }
 
-func ProvideAzureMock() (*azure.AzureService, error) {
-	wire.Build(azureMockSet)
-	return new(azure.AzureService), nil
+func ProvideAzureClientMock(cfg config.Config) azure.AzureClientIfc {
+	panic(wire.Build(azureClientMockSet))
+	// return new(azure.AzureClientMock), nil
 }
 
 func ProvideServer(cfg config.Config) (*server.Server, error) {
-	if cfg.UseAzureMock {
-		wire.Build(ProvideAzureMock, server.NewDB)
-	} else {
-		wire.Build(ProvideAzureMock, server.NewDB)
-	}
-
+	wire.Build(server.NewServer, ProvideAzureClient, azure.NewAzureService, server.NewDB)
 	return new(server.Server), nil
 }
 
-func ProvideCronJob(cfg config.Config) (*server.Server, error) {
-	if cfg.UseAzureMock {
-		wire.Build(ProvideAzureMock, server.NewDB)
-	} else {
-		wire.Build(ProvideAzureMock, server.NewDB)
-	}
-
+func ProvideServerMock(cfg config.Config) (*server.Server, error) {
+	wire.Build(server.NewServer, ProvideAzureClientMock, azure.NewAzureService, server.NewDB)
 	return new(server.Server), nil
 }
