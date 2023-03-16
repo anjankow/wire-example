@@ -12,14 +12,14 @@ type Server struct {
 	Azure       *azure.AzureService
 	azureClient azure.AzureClientIfc
 	db          *sql.DB
-	cfg         config.Config
+	Cfg         config.Config
 }
 
 type CronJob struct {
 	Azure       *azure.AzureService
 	azureClient azure.AzureClientIfc
 	db          *sql.DB
-	cfg         config.Config
+	Cfg         config.Config
 }
 
 func NewDB(cfg config.Config) (*sql.DB, error) {
@@ -34,7 +34,16 @@ func NewServer(cfg config.Config, azureService *azure.AzureService, azureClient 
 	return &Server{
 		db:          db,
 		azureClient: azureClient,
-		cfg:         cfg,
+		Cfg:         cfg,
+		Azure:       azureService,
+	}, nil
+}
+
+func NewCronJob(cfg config.Config, azureService *azure.AzureService, azureClient azure.AzureClientIfc, db *sql.DB) (*CronJob, error) {
+	return &CronJob{
+		db:          db,
+		azureClient: azureClient,
+		Cfg:         cfg,
 		Azure:       azureService,
 	}, nil
 }

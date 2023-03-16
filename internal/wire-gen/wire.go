@@ -32,10 +32,24 @@ func ProvideAzureClientMock(cfg config.Config) azure.AzureClientIfc {
 
 func ProvideServer(cfg config.Config) (*server.Server, error) {
 	wire.Build(server.NewServer, ProvideAzureClient, azure.NewAzureService, server.NewDB)
+	// return just to satisfy the compiler
 	return new(server.Server), nil
 }
 
 func ProvideServerMock(cfg config.Config) (*server.Server, error) {
 	wire.Build(server.NewServer, ProvideAzureClientMock, azure.NewAzureService, server.NewDB)
+	// return just to satisfy the compiler
 	return new(server.Server), nil
+}
+
+func ProvideCronJob(cfg config.Config) (*server.Server, error) {
+	wire.Build(server.NewServer, ProvideAzureClient, azure.NewAzureService, server.NewDB)
+	// return just to satisfy the compiler
+	return new(server.Server), nil
+}
+
+func ProvideCronJobMock(cfg config.Config) (*server.CronJob, error) {
+	wire.Build(server.NewCronJob, ProvideAzureClientMock, azure.NewAzureService, server.NewDB)
+	// return just to satisfy the compiler
+	return new(server.CronJob), nil
 }

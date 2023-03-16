@@ -2,7 +2,6 @@ package azure
 
 import (
 	"database/sql"
-	"fmt"
 	"wire-example/internal/config"
 )
 
@@ -12,8 +11,6 @@ type AzureService struct {
 }
 
 func NewAzureService(cfg config.Config, client AzureClientIfc, db *sql.DB) (*AzureService, error) {
-	fmt.Println("azure: using ", client.GetName())
-	fmt.Println("config value: ", cfg.ImportantConfigValue)
 	return &AzureService{
 		client: client,
 		db:     db,
